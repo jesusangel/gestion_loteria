@@ -24,6 +24,13 @@
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
 
+// Cargamos el archivo de configuracion loteria
+Configure::load('loteria');
+
+// Idioma por defecto: español
+Configure::write('Config.language', 'spa');
+$locale = setlocale('LC_ALL', 'es_ES.utf8@euro');
+
 // Setup a 'default' cache configuration for use in the application.
 Cache::config('default', array('engine' => 'File'));
 
@@ -107,3 +114,8 @@ CakeLog::config('error', array(
 	'types' => array('warning', 'error', 'critical', 'alert', 'emergency'),
 	'file' => 'error',
 ));
+
+/*
+ * Cargamos el plugin debug_kit
+ */
+CakePlugin::load('DebugKit');

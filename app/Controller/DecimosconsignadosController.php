@@ -16,6 +16,66 @@ class DecimosconsignadosController extends AppController {
 		$this->Decimosconsignado->recursive = 0;
 		$this->set('decimosconsignados', $this->paginate());
 	}
+	
+	public function seleccionar_sorteo() {
+		$sorteos = $this->Decimosconsignado->Sorteo->find('list', array(
+			'fields' =>  array('id', 'titulo'),
+			'conditions' => array('fecha >= NOW()')
+		));
+		$this->set(compact('sorteos'));
+		
+		if ($this->request->is('post')) {
+			$this->Decimosconsignado->Sorteo->contain();
+			
+			$codigo = trim($this->request->data('Decimosconsignado.codigo'));
+			if ( $codigo != '' ) {
+				try {
+					$datos_de_codigo = $this->Decimosconsignado->parseCodigo($codigo);
+					
+					$options = array('conditions' => array(
+						'Sorteo.numero' => $datos_de_codigo['numero_sorteo'],
+						'Sorteo.anio' => $datos_de_codigo['anio'])
+					);
+					if ( $sorteo = $this->Decimosconsignado->Sorteo->find('first', $options) ) {
+						if ( (strtotime($sorteo['Sorteo']['fecha']) - time()) < 0 ) {
+							throw new Exception('El sorteo seleccionado ya ha sido celebrado');
+						}
+						$this->request->data('Sorteo', $sorteo['Sorteo']);
+					} else {
+						if ( (strtotime($datos_de_codigo['fecha_sorteo']) - time()) < 0 ) {
+							throw new Exception('El sorteo seleccionado ya ha sido celebrado');
+						}
+						$this->request
+							->data('Sorteo.numero', $datos_de_codigo['numero_sorteo'])
+							->data('Sorteo.anio', $datos_de_codigo['anio'])
+							->data('Sorteo.precio_x_decimo', $datos_de_codigo['precio_x_decimo'])
+							->data('Sorteo.fecha', $datos_de_codigo['fecha_sorteo']);
+					} 
+			
+				} catch (Exception $e) {
+					$this->Session->setFlash($e->getMessage());
+				}
+			} else if ( ($sorteo_id = $this->request->data('Decimosconsignado.sorteo_id')) > 0 ) {
+				$sorteo = $this->Decimosconsignado->Sorteo->find('first', array('conditions' => array('id' => $sorteo_id)));
+				$this->request->data('Sorteo', $sorteo['Sorteo']);
+			}
+		}
+	}
+	
+	public function consignar() {
+		$this->Decimosconsignado->Sorteo->contain(false);
+		if ( !$sorteo = $this->Decimosconsignado->Sorteo->find('first', $this->request->named['sorteo_id']) ) {
+			throw new NotFoundException(__('Sorteo no válido'));
+		}
+		if ( (strtotime($sorteo['Sorteo']['fecha']) - time()) < 0 ) {
+			throw new Exception(__('El sorteo ya se ha celebrado'));
+		}
+		$modosConsignacion = array('individual' => 'individual', 'fraccion' => 'fraccion', 'billete' => 'billete', 'series' => 'series');
+		$modoConsignacionSeleccionado = 'series';
+		
+		$this->set(compact('sorteo', 'modosConsignacion', 'modoConsignacionSeleccionado'));
+		$this->set('decimosconsignados', $this->paginate(array('sorteo_id' => $sorteo['Sorteo']['id'])));
+	}
 
 /**
  * view method

@@ -246,10 +246,10 @@ dt {
 	font-weight: bold;
 	padding-left: 4px;
 	vertical-align: top;
-	width: 10em;
+	width: 20em;
 }
 dd {
-	margin-left: 10em;
+	margin-left: 20em;
 	margin-top: -2em;
 	vertical-align: top;
 }
@@ -285,7 +285,6 @@ fieldset fieldset div {
 }
 form div {
 	clear: both;
-	margin-bottom: 1em;
 	padding: .5em;
 	vertical-align: text-top;
 }
@@ -307,15 +306,16 @@ form div.submit {
 }
 label {
 	display: block;
+	float: left;
 	font-size: 110%;
-	margin-bottom:3px;
+	margin-right:5px;
+	width: 20%;
 }
 input, textarea {
 	clear: both;
 	font-size: 140%;
 	font-family: "frutiger linotype", "lucida grande", "verdana", sans-serif;
-	padding: 1%;
-	width:98%;
+	padding: 5px;
 }
 select {
 	clear: both;
@@ -362,7 +362,6 @@ form .submit input[type=submit] {
 	border-color: #2d6324;
 	color: #fff;
 	text-shadow: rgba(0, 0, 0, 0.5) 0px -1px 0px;
-	padding: 8px 10px;
 }
 form .submit input[type=submit]:hover {
 	background: #5BA150;
