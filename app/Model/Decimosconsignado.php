@@ -1,5 +1,6 @@
 <?php
 App::uses('AppModel', 'Model');
+
 /**
  * Decimosconsignado Model
  *
@@ -13,6 +14,14 @@ class Decimosconsignado extends AppModel {
  * @var string
  */
 	public $displayField = 'numero';
+	public $order = array('Decimosconsignado.id' => 'DESC');
+	
+	public $validate = array(
+		'numero' => array(
+			'rule' => array('checkUnique', array('numero', 'sorteo_id', 'serie', 'fraccion')),
+			'message' => 'Este décimo ya ha sido consignado previamente'
+		)
+	);
 	
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
 
@@ -34,7 +43,7 @@ class Decimosconsignado extends AppModel {
 /*
  * 
  */	
-	public function parseCodigo($codigo) {
+	public static function parseCodigo($codigo) {
 		if ( preg_match('/([56]{1})([0-9]{3})([0-9]{1})([0-9]{2})([0-9]{3}).([0-9]{5})([0-9]{4})/', $codigo, $matches) != 1 ) {
 			throw new Exception(__('Código no válido'));
 		}
@@ -46,7 +55,7 @@ class Decimosconsignado extends AppModel {
 		$precio_x_decimo = (int) Sorteo::calcularPrecioDecimo($numero_sorteo);
 		
 		$digito_anio = (int) $matches[3];
-		$anio = (int) $this->_digito_anio_to_aaaa($digito_anio);
+		$anio = (int) self::_digito_anio_to_aaaa($digito_anio);
 
 		$fecha_sorteo = Sorteo::calcularFechaSorteo($numero_sorteo, $anio);
 		
@@ -80,7 +89,7 @@ class Decimosconsignado extends AppModel {
 		
 	}
 	
-	private function _digito_anio_to_aaaa($digito_anio) {
+	private static function _digito_anio_to_aaaa($digito_anio) {
 		// FIXME
 		// año actual 2019 y da = 0 indica que el decimo es de 2020  
 		// año actual 2021 y da = 0 indica que el decimo es de 2020
@@ -102,5 +111,80 @@ class Decimosconsignado extends AppModel {
 		}
 	}
 
-	
+	/**
+	 * @throws SorteoNoEncontradoException
+	 * @throws SorteoNoEncontradoException
+	 * @throws DecimoAjenoException  
+	 */
+	public function consignar_series($sorteo_id, $codigo_o_numero, $serie_inicial, $serie_final) {
+		if ( $sorteo_id <= 0 ) {
+			throw new SorteoNoEncontradoException(__('No se ha especificado el ID del sorteo'));
+		}
+		$opciones_sorteo = array(
+			'conditions' => array('Sorteo.id' => $sorteo_id),
+			'contain' => false
+		);
+		if ( !$sorteo = $this->Sorteo->find('first', $opciones_sorteo) ) {
+			throw new SorteoNoEncontradoException();
+		}
+		if ( (strtotime($sorteo['Sorteo']['fecha']) - time()) < 0 ) {
+			throw new SorteoCelebradoException();
+		}
+		
+		if ( strlen($codigo_o_numero) == Configure::read('longitudCodigoDecimo') ) {
+			$datos_de_codigo = self::parseCodigo($codigo_o_numero);
+			
+			if ( $datos_de_codigo['numero_sorteo'] != $sorteo['Sorteo']['numero'] || $datos_de_codigo['anio'] != $sorteo['Sorteo']['anio'] ) {
+				throw new DecimoAjenoException();
+			}
+			
+			$numero = (int) $datos_de_codigo['numero'];
+		} else {
+			if ( $codigo_o_numero <= 0 || $codigo_o_numero > Configure::read('numeroMaximo') ) {
+				throw new UnexpectedValueException(__('El número introducido no está dentro de los márgenes admitidos: 0 - ' . Configure::read('numeroMaximo')));
+			}
+			$numero = (int) $codigo_o_numero; 
+		}
+		
+		if ( $serie_inicial <= 0 || $serie_inicial > Configure::read('serieMaxima') ) {
+			throw new UnexpectedValueException(__('La serie inicial no está dentro de los márgenes admitidos: 1 - ' . Configure::read('serieMaxima')));
+		}
+		
+		if ( $serie_final <= 0 || $serie_final > Configure::read('serieMaxima') ) {
+			throw new UnexpectedValueException(__('La serie final no está dentro de los márgenes admitidos: 1 - ' . Configure::read('serieMaxima')));
+		}
+		
+		$errores = array();
+		$consignados = $duplicados = 0;
+		
+		for ( $serie = $serie_inicial; $serie <= $serie_final; $serie++ ) {
+			for ( $fraccion = 1; $fraccion <= 10; $fraccion++ ) {
+				try {
+					$this->create();
+					if ( $this->save(array(
+						'Decimosconsignado' => array(
+							'numero' => $numero,
+							'serie' => $serie,
+							'fraccion' => $fraccion,
+							'sorteo_id' => $sorteo['Sorteo']['id']
+						)
+					)) ) {
+						$consignados++;
+					} else {
+						$duplicados++;	// La única validación que se hace es la de los duplicados
+					}
+				} catch ( PDOException $e) {
+					if ( $e->getCode() == 23000 ) {
+						$duplicados++;
+					} else {
+						$errores[] = "Error al consignar el décimo número, {$numero}, serie {$serie}, fraccion {$fraccion}: " . $e->getMessage();
+					}
+				} catch( Exception $e ) {
+					$errores[] = "Error al consignar el décimo número, {$numero}, serie {$serie}, fraccion {$fraccion}: " . $e->getMessage();
+				}
+			}
+		}
+		
+		return compact('errores', 'duplicados', 'consignados');
+	}
 }

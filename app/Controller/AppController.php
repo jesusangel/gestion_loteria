@@ -22,6 +22,7 @@
  */
 
 App::uses('Controller', 'Controller');
+App::uses('CakeNumber', 'Utility');
 
 /**
  * Application Controller
@@ -33,7 +34,34 @@ App::uses('Controller', 'Controller');
  * @link		http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller {
-	public $components = array('DebugKit.Toolbar', 'Session');
-	public $helpers = array('Js' => array('Jquery'));
+	public $components = array('DebugKit.Toolbar', 'Session', 'Cookie');
+	public $helpers = array(
+		'Js' => array('Jquery'),
+		'Number' => array(
+			'places' => 2,
+			'thousands' => '.',
+			'decimals' => ',',
+			'wholeSymbol' => '€',
+			'wholePosition' => 'after'
+		)
+	);
 	//public $theme = 'Loteria';
+	
+	public function beforeFilter() {
+	    parent::beforeFilter();
+	    
+	    $this->Cookie->time = '1 year';  // or '1 hour'
+	}
+	
+	public function beforeRender() {
+		parent::beforeRender();
+		
+		CakeNumber::addFormat('EUR', array(
+			'thousands' => '.',
+			'decimals' => ',',
+			'wholeSymbol' => ' €',
+			'wholePosition' => 'after'
+		));
+		CakeNumber::defaultCurrency('EUR');
+	}
 }

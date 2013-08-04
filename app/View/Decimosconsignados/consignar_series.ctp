@@ -3,22 +3,36 @@
 	<dl>
 		<dt><?php echo __('Precio de los décimos'); ?></dt>
 		<dd>
-			<?php echo h($sorteo['Sorteo']['precio_x_decimo']); ?> €
+			<?php echo $this->Number->currency($sorteo['Sorteo']['precio_x_decimo']); ?>
 			&nbsp;
 		</dd>
 	</dl>
 </div>
 <div>
-	<h2><?php echo __('Consignar décimos'); ?></h2>
-	
 	<?php 
-		echo $this->Form->create('modoConsignacion');
-		echo $this->Form->select('modoConsignacion', $modosConsignacion, array(
-			'label' => __('Modo de consignación'), 
+		echo $this->Form->create(null, array('action' => 'set_modo_consignacion'));
+		echo $this->Form->input('modoConsignacion', array(
+			'type' => 'radio',
+			'options' => $modosConsignacion,
+			'legend' => __('Modo de consignación seleccionado'), 
 			'empty' => false,
 			'value' => $modoConsignacionSeleccionado));
-		echo $this->Form->end();
+		echo $this->Form->submit(__('Cambiar el modo de consignación'), array('div' => false));
+		echo $this->Form->end();		
+		
+		echo $this->Form->create();
 	?>
+		<fieldset>
+			<legend><?php echo __('Consignación por series'); ?></legend>
+	<?php
+			echo $this->Form->hidden('sorteo_id', array('value' => $sorteo['Sorteo']['id']));
+			echo $this->Form->input('codigo', array('class' => 'focus', 'div' => false, 'label' => __('Código o número del décimo'), 'size' => 20, 'maxlength' => 20));
+			echo $this->Form->input('serieInicial', array('div' => false, 'size' => 3, 'maxlength' => 3));
+			echo $this->Form->input('serieFinal', array('div' => false, 'size' => 3, 'maxlength' => 3));
+			echo $this->form->submit(__('Consignar décimos'), array('div' => false));
+			echo $this->Form->end();
+	?>
+		</fieldset>
 </div>
 <div class="decimosconsignados consignar">
 	<h2><?php echo __('Décimos consignados en este sorteo'); ?></h2>

@@ -71,6 +71,7 @@ class SorteosController extends AppController {
 			throw new NotFoundException(__('Sorteo no válido'));
 		}
 		if ($this->request->is('post') || $this->request->is('put')) {
+			$this->request->data('Sorteo.precio_x_decimo', strtr($this->request->data('Sorteo.precio_x_decimo'), array('.' => '', ',' => '.')));
 			if ($this->Sorteo->save($this->request->data)) {
 				$this->redirect(array('controller' => 'decimosconsignados', 'action' => 'consignar', 'sorteo_id' => $this->Sorteo->id));
 			} else {

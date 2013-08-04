@@ -29,7 +29,7 @@ Configure::load('loteria');
 
 // Idioma por defecto: español
 Configure::write('Config.language', 'spa');
-$locale = setlocale('LC_ALL', 'es_ES.utf8@euro');
+$locale = setlocale('LC_ALL', 'es_ES.utf8@euro', 'es_ES.utf8', 'es_ES');
 
 // Setup a 'default' cache configuration for use in the application.
 Cache::config('default', array('engine' => 'File'));
@@ -119,3 +119,8 @@ CakeLog::config('error', array(
  * Cargamos el plugin debug_kit
  */
 CakePlugin::load('DebugKit');
+
+/*
+ * Requerimos el fichero con las excepciones propias de la aplicación
+ */
+require APP . 'Lib' . DS . 'Error' . DS . 'exceptions.php';

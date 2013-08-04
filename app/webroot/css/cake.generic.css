@@ -262,14 +262,16 @@ form {
 	width: 95%;
 }
 fieldset {
-	border: none;
+	border: 1px solid #ccc;
 	margin-bottom: 1em;
 	padding: 16px 10px;
+	width: auto;
 }
 fieldset legend {
 	color: #e32;
 	font-size: 160%;
 	font-weight: bold;
+	padding: 2px;
 }
 fieldset fieldset {
 	margin-top: 0;
@@ -305,11 +307,16 @@ form div.submit {
 	margin-top: 10px;
 }
 label {
+	margin-right:5px;
+	font-size: 110%;
+}
+div.input label {
 	display: block;
 	float: left;
-	font-size: 110%;
-	margin-right:5px;
 	width: 20%;
+}
+form > input, form fieldset > input {
+	margin-right: 10px;
 }
 input, textarea {
 	clear: both;

@@ -34,7 +34,7 @@
 		echo $this->Form->input('id');
 		echo $this->Form->input('numero', array('size' => 3, 'maxlength' => 3));
 		echo $this->Form->input('anio', array('size' => 4, 'maxlength' => 4));
-		echo $this->Form->input('precio_x_decimo', array('size' => 5, 'maxlength' => 5));
+		echo $this->Form->input('precio_x_decimo', array('value' => 0 + $this->request->data['Sorteo']['precio_x_decimo'], 'size' => 5, 'maxlength' => 5));
 		echo $this->Form->input('fecha', array('dateFormat' => 'DMY', 'minYear' => date('Y'), 'maxYear' => date('Y') + 1));
 	?>
 	</fieldset>

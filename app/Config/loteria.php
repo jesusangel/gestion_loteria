@@ -11,7 +11,7 @@ $config = array(
 	'numeroSorteoNavidad' => 102,
 	'maximoNumeroSorteo' => 103,
 	// opciones: individual, fraccion, billete, series
-	'modoEntradaDecimos' => 'series',
+	'modoConsignacionDecimos' => 'series',
 	'modoAnulacionDecimos' => 'series',
 );
 
