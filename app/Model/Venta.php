@@ -13,6 +13,13 @@ class Venta extends AppModel {
  * @var string
  */
 	public $displayField = 'importe';
+	
+	public $validate = array(
+		'importe' => array(
+			'rule' => 'naturalNumber',
+			'message' => 'El importe de la venta debe ser mayor que cero'
+		)
+	);
 
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed

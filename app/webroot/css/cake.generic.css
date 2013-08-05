@@ -115,10 +115,12 @@ p {
 div.form,
 div.index,
 div.view {
+	/**
 	float:right;
 	width:76%;
 	border-left:1px solid #666;
 	padding:10px 2%;
+	**/
 }
 div.actions {
 	float:left;
@@ -165,7 +167,7 @@ table tr td {
 table tr:nth-child(even) {
 	background: #f9f9f9;
 }
-td.actions {
+th.actions, td.actions {
 	text-align: center;
 	white-space: nowrap;
 }
@@ -315,7 +317,7 @@ div.input label {
 	float: left;
 	width: 20%;
 }
-form > input, form fieldset > input {
+form > input, form fieldset > input, form > select, form fieldset > select {
 	margin-right: 10px;
 }
 input, textarea {
@@ -563,8 +565,15 @@ input[type=submit]:active,
 
 /** Related **/
 .related {
-	clear: both;
-	display: block;
+	float: left;
+	margin-right: 10px;
+	padding-right: 10px;
+}
+div.related {
+	border-right: 1px solid #ddd;
+}
+.related table {
+	width: auto;
 }
 
 /** Debugging **/
@@ -744,3 +753,10 @@ pre {
 #url-rewriting-warning {
 	display:none;
 }
+
+/** Menu **/
+#menu { padding: 0;}
+#menu ul { margin: 0;}
+#menu li { display: inline; margin: 0; }
+#menu li a { font-family: Arial; font-size:150%; text-decoration: none; float:left; padding: 10px; background-color: #2175bc; color: #fff; }
+#menu li a:hover { background-color: #2586d7; margin-top:-2px; padding-bottom:12px; }

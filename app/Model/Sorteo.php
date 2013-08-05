@@ -18,7 +18,9 @@ class Sorteo extends AppModel {
 	public $order = array('fecha' => 'ASC');
 	
 	public $virtualFields = array(
-	    'titulo' => 'CONCAT(Sorteo.numero, " / ", Sorteo.anio, ", ", DATE_FORMAT(Sorteo.fecha, "%W %e de %M de %Y"))'
+	    'titulo' => 'CONCAT(Sorteo.numero, " / ", Sorteo.anio, ", ", DATE_FORMAT(Sorteo.fecha, "%W %e de %M de %Y"))',
+	    'titulo_corto' => 'CONCAT(Sorteo.numero, " / ", Sorteo.anio, ", ", DATE_FORMAT(Sorteo.fecha, "%d/%m/%Y"))',
+	    'titulo_express' => 'CONCAT(Sorteo.numero, " / ", Sorteo.anio)'
 	);
 
 
@@ -33,7 +35,7 @@ class Sorteo extends AppModel {
 		'Decimosconsignado' => array(
 			'className' => 'Decimosconsignado',
 			'foreignKey' => 'sorteo_id',
-			'dependent' => false,
+			'dependent' => true,
 			'conditions' => '',
 			'fields' => '',
 			'order' => '',
@@ -46,7 +48,20 @@ class Sorteo extends AppModel {
 		'Numerosvendido' => array(
 			'className' => 'Numerosvendido',
 			'foreignKey' => 'sorteo_id',
-			'dependent' => false,
+			'dependent' => true,
+			'conditions' => '',
+			'fields' => '',
+			'order' => '',
+			'limit' => '',
+			'offset' => '',
+			'exclusive' => '',
+			'finderQuery' => '',
+			'counterQuery' => ''
+		),
+		'Numerosinvendido' => array(
+			'className' => 'Numerosinvendido',
+			'foreignKey' => 'sorteo_id',
+			'dependent' => true,
 			'conditions' => '',
 			'fields' => '',
 			'order' => '',

@@ -10,10 +10,10 @@
 		echo $this->Form->input('fecha_invendido');
 	?>
 	</fieldset>
-<?php echo $this->Form->end(__('Submit')); ?>
+<?php echo $this->Form->end(__('Guardar')); ?>
 </div>
 <div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
+	<h3><?php echo __('Acciones'); ?></h3>
 	<ul>
 
 		<li><?php echo $this->Html->link(__('List Decimosconsignados'), array('action' => 'index')); ?></li>

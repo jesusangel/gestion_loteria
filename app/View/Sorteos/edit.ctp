@@ -10,13 +10,13 @@
 		echo $this->Form->input('fecha');
 	?>
 	</fieldset>
-<?php echo $this->Form->end(__('Submit')); ?>
+<?php echo $this->Form->end(__('Guardar')); ?>
 </div>
 <div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
+	<h3><?php echo __('Acciones'); ?></h3>
 	<ul>
 
-		<li><?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $this->Form->value('Sorteo.id')), null, __('Are you sure you want to delete # %s?', $this->Form->value('Sorteo.id'))); ?></li>
+		<li><?php echo $this->Form->postLink(__('Borrar'), array('action' => 'delete', $this->Form->value('Sorteo.id')), null, __('¿Seguro que desea borrar # %s\?', $this->Form->value('Sorteo.id'))); ?></li>
 		<li><?php echo $this->Html->link(__('List Sorteos'), array('action' => 'index')); ?></li>
 		<li><?php echo $this->Html->link(__('List Decimosconsignados'), array('controller' => 'decimosconsignados', 'action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New Decimosconsignado'), array('controller' => 'decimosconsignados', 'action' => 'add')); ?> </li>

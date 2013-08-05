@@ -8,8 +8,10 @@
 		</dd>
 	</dl>
 </div>
+
 <div>
-	<?php 
+	<?php
+	/* 
 		echo $this->Form->create(null, array('action' => 'set_modo_consignacion'));
 		echo $this->Form->input('modoConsignacion', array(
 			'type' => 'radio',
@@ -18,7 +20,8 @@
 			'empty' => false,
 			'value' => $modoConsignacionSeleccionado));
 		echo $this->Form->submit(__('Cambiar el modo de consignación'), array('div' => false));
-		echo $this->Form->end();		
+		echo $this->Form->end();
+	*/		
 		
 		echo $this->Form->create();
 	?>
@@ -39,17 +42,15 @@
 	<table cellpadding="0" cellspacing="0">
 	<tr>
 			<th><?php echo $this->Paginator->sort('numero'); ?></th>
-			<th><?php echo $this->Paginator->sort('serie'); ?></th>
-			<th><?php echo $this->Paginator->sort('fraccion'); ?></th>
-			<th class="actions"><?php echo __('Actions'); ?></th>
+			<th><?php echo $this->Paginator->sort('cantidad'); ?></th>
+			<th class="actions"><?php echo __('Acciones'); ?></th>
 	</tr>
 	<?php foreach ($decimosconsignados as $decimosconsignado): ?>
 	<tr>
 		<td><?php echo h($decimosconsignado['Decimosconsignado']['numero']); ?>&nbsp;</td>
-		<td><?php echo h($decimosconsignado['Decimosconsignado']['serie']); ?>&nbsp;</td>
-		<td><?php echo h($decimosconsignado['Decimosconsignado']['fraccion']); ?>&nbsp;</td>
+		<td><?php echo h($decimosconsignado['Decimosconsignado']['cantidad']); ?>&nbsp;</td>
 		<td class="actions">
-			<?php echo $this->Form->postLink(__('Delete'), array('action' => 'delete', $decimosconsignado['Decimosconsignado']['id']), null, __('Are you sure you want to delete # %s?', $decimosconsignado['Decimosconsignado']['id'])); ?>
+			<?php echo $this->Form->postLink(__('Borrar'), array('action' => 'delete', $decimosconsignado['Decimosconsignado']['id']), null, __('¿Seguro que quiere borrar el número # %s?', $decimosconsignado['Decimosconsignado']['numero'])); ?>
 		</td>
 	</tr>
 <?php endforeach; ?>
@@ -57,7 +58,7 @@
 	<p>
 	<?php
 	echo $this->Paginator->counter(array(
-	'format' => __('Page {:page} of {:pages}, showing {:current} records out of {:count} total, starting on record {:start}, ending on {:end}')
+	'format' => __('Página {:page} de {:pages}, mostrando {:current} registros de {:count} totales, comenzando en {:start}, terminando en {:end}')
 	));
 	?>	</p>
 	<div class="paging">

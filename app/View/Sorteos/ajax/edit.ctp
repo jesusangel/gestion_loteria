@@ -10,5 +10,5 @@
 		echo $this->Form->input('fecha');
 	?>
 	</fieldset>
-<?php echo $this->Form->end(__('Submit')); ?>
+<?php echo $this->Form->end(__('Guardar')); ?>
 </div>

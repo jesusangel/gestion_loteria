@@ -30,6 +30,18 @@ class SorteosController extends AppController {
 		}
 		$options = array('conditions' => array('Sorteo.' . $this->Sorteo->primaryKey => $id));
 		$this->set('sorteo', $this->Sorteo->find('first', $options));
+		
+		$this->Sorteo->virtualFields['Decimosconsignados'] = 0;
+		$resultado = $this->Sorteo->query("SELECT sum(cantidad) AS Sorteo__Decimosconsignados FROM decimosconsignados WHERE sorteo_id = {$id}");
+		$this->set('totalDecimosConsignados', $resultado[0]['Sorteo']['Decimosconsignados']);
+		
+		$this->Sorteo->virtualFields['Numerosvendidos'] = 0;
+		$resultado = $this->Sorteo->query("SELECT sum(cantidad) AS Sorteo__Numerosvendidos FROM numerosvendidos WHERE sorteo_id = {$id}");
+		$this->set('totalDecimosVendidos', $resultado[0]['Sorteo']['Numerosvendidos']);
+		
+		$this->Sorteo->virtualFields['Numerosinvendidos'] = 0;
+		$resultado = $this->Sorteo->query("SELECT sum(cantidad) AS Sorteo__Numerosinvendidos FROM numerosinvendidos WHERE sorteo_id = {$id}");
+		$this->set('totalDecimosInvendidos', $resultado[0]['Sorteo']['Numerosinvendidos']);
 	}
 	
 	public function get_form($id = null) {

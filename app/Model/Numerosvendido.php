@@ -14,6 +14,12 @@ class Numerosvendido extends AppModel {
  * @var string
  */
 	public $displayField = 'numero';
+	
+	public $validate = array(
+		'numero' => 'notEmpty',
+		'sorteo_id' => 'notEmpty',
+		'venta_id' => 'notEmpty'
+	);
 
 
 	//The Associations below have been created with all possible keys, those that are not needed can be removed

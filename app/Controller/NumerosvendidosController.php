@@ -48,7 +48,7 @@ class NumerosvendidosController extends AppController {
 			}
 		}
 		$sorteos = $this->Numerosvendido->Sorteo->find('list');
-		$ventas = $this->Numerosvendido->Ventum->find('list');
+		$ventas = $this->Numerosvendido->Venta->find('list');
 		$this->set(compact('sorteos', 'ventas'));
 	}
 
@@ -75,7 +75,7 @@ class NumerosvendidosController extends AppController {
 			$this->request->data = $this->Numerosvendido->find('first', $options);
 		}
 		$sorteos = $this->Numerosvendido->Sorteo->find('list');
-		$ventas = $this->Numerosvendido->Ventum->find('list');
+		$ventas = $this->Numerosvendido->Venta->find('list');
 		$this->set(compact('sorteos', 'ventas'));
 	}
 

@@ -43,15 +43,6 @@
 <?php endif; ?>
 
 </div>
-<div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
-	<ul>
-
-		<li><?php echo $this->Html->link(__('List Decimosconsignados'), array('action' => 'index')); ?></li>
-		<li><?php echo $this->Html->link(__('List Sorteos'), array('controller' => 'sorteos', 'action' => 'index')); ?> </li>
-		<li><?php echo $this->Html->link(__('New Sorteo'), array('controller' => 'sorteos', 'action' => 'add')); ?> </li>
-	</ul>
-</div>
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(

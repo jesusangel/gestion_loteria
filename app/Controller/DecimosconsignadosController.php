@@ -123,7 +123,7 @@ class DecimosconsignadosController extends AppController {
 						$serie_inicial = (int) $this->request->data('Decimosconsignado.serieInicial');
 						$serie_final = (int) $this->request->data('Decimosconsignado.serieFinal');
 						$resultado = $this->Decimosconsignado->consignar_series($sorteo_id, $codigo_o_numero, $serie_inicial, $serie_final);
-						$this->Session->setFlash(__("Importados {$resultado['consignados']} décimos, duplicados {$resultado['duplicados']}, con errores: " . count($resultado['errores'])));
+						$this->Session->setFlash(__('Consignados %s números', $resultado));
 					break;
 				}
 			}
@@ -141,83 +141,7 @@ class DecimosconsignadosController extends AppController {
 		
 		$this->set(compact('sorteo', 'modosConsignacion', 'modoConsignacionSeleccionado'));
 		$this->set('decimosconsignados', $this->paginate(array('sorteo_id' => $sorteo['Sorteo']['id'])));
-	}
-	
-	public function consignar_series() {
-		try {
-			if ( !$this->request->data('Decimosconsignado.sorteo_id') ) {
-				throw new UnexpectedValueException(__('Debe seleccionar el sorteo para el que se consignarán los décimos'));
-			}
-			$opciones_sorteo = array(
-				'conditions' => array('Sorteo.id' => $this->request->data('Decimosconsignado.sorteo_id')),
-				'contain' => false
-			);
-			if ( !$sorteo = $this->Decimosconsignado->Sorteo->find('first', $opciones_sorteo) ) {
-				throw new NotFoundException(__('Sorteo no válido'));
-			}
-			if ( (strtotime($sorteo['Sorteo']['fecha']) - time()) < 0 ) {
-				throw new Exception(__('El sorteo ya se ha celebrado'));
-			}
-		} catch ( Exception $e ) {
-			$this->Session->setFlash($e->getMessage());
-			$this->redirect(array('action' => 'seleccionar_sorteo'));
-		}
-		
-		try {
-			$codigo_o_numero = trim($this->request->data('Decimosconsignado.codigo'));
-			if ( strlen($codigo_o_numero) == Configure::read('longitudCodigoDecimo') ) {
-				$datos_de_codigo = $this->Decimosconsignado->parseCodigo($codigo_o_numero);
-				
-				if ( $datos_de_codigo['numero_sorteo'] != $sorteo['Sorteo']['numero'] || $datos_de_codigo['anio'] != $sorteo['Sorteo']['anio'] ) {
-					throw new UnexpectedValueException(__('El décimo escaneado no pertenece a este sorteo'));
-				}
-				
-				$numero = (int) $datos_de_codigo['numero'];
-			} else {
-				if ( $codigo_o_numero <= 0 || $codigo_o_numero > Configure::read('numeroMaximo') ) {
-					throw new UnexpectedValueException(__('El número introducido no está dentro de los márgenes admitidos: 0 - ' . Configure::read('numeroMaximo')));
-				}
-				$numero = (int) $codigo_o_numero; 
-			}
-			
-			$serie_inicial = (int) $this->request->data('Decimosconsignado.serieInicial');
-			if ( $serie_inicial <= 0 || $serie_inicial > Configure::read('serieMaxima') ) {
-				throw new UnexpectedValueException(__('La serie inicial no está dentro de los márgenes admitidos: 1 - ' . Configure::read('serieMaxima')));
-			}
-			
-			$serie_final = (int) $this->request->data('Decimosconsignado.serieFinal');
-			if ( $serie_final <= 0 || $serie_final > Configure::read('serieMaxima') ) {
-				throw new UnexpectedValueException(__('La serie final no está dentro de los márgenes admitidos: 1 - ' . Configure::read('serieMaxima')));
-			}
-			
-			$errores = array();
-			$consignados = 0;
-			
-			for ( $serie = $serie_inicial; $serie <= $serie_final; $serie++ ) {
-				for ( $fraccion = 1; $fraccion <= 10; $fraccion++ ) {
-					try {
-						$this->Decimosconsignado->create();
-						$this->Decimosconsignado->save(array(
-							'Decimosconsignado' => array(
-								'numero' => $numero,
-								'serie' => $serie,
-								'fraccion' => $fraccion,
-								'sorteo_id' => $sorteo['Sorteo']['id']
-							)
-						));
-						$consignados++;
-					} catch( Exception $e ) {
-						$errores[] = "Error al consignar el décimo número, {$numero}, serie {$serie}, fraccion {$fraccion}: " . $e->getMessage();
-					}
-				}
-			}
-		} catch ( UnexpectedValueException $e ) {
-			$this->Session->setFlash($e->getMessage());
-		} 
-
-		$this->Session->setFlash(__("Consignados {$consignados} décimos"));
-		$this->redirect(array('action' => 'consignar'));
-	}
+	}		
 
 /**
  * view method
@@ -234,6 +158,29 @@ class DecimosconsignadosController extends AppController {
 		$this->set('decimosconsignado', $this->Decimosconsignado->find('first', $options));
 	}
 
+/**
+ * método buscar
+ *
+ * @throws NotFoundException
+ * @param string $codigo_o_numero
+ * @return void
+ */
+	public function buscar($codigo = null) {
+		if ( strlen($codigo) == Configure::read('longitudCodigoDecimo') ) {
+			$datos_de_codigo = $this->Decimosconsignado->parseCodigo($codigo);
+			
+			//$sorteo = $this->Decimosconsignado->Sorteo->find('first', array('conditions'))
+
+			if ( !$decimo = $this->Decimosconsignado->find('first', array('conditions' => array('Decimosconsignado.numero' => $datos_de_codigo['numero'], 'Sorteo.numero' => $datos_de_codigo['numero_sorteo'], 'Sorteo.anio' => $datos_de_codigo['anio']))) ) {
+				throw new NotFoundException(__('Número no consignado'));
+			}
+		} else {
+			 throw new NotFoundException(__('Número no consignado'));
+		}
+		
+		$this->set(compact('decimo'));	
+		$this->set('_serialize', array('decimo'));
+	}
 /**
  * add method
  *
@@ -289,14 +236,14 @@ class DecimosconsignadosController extends AppController {
 	public function delete($id = null) {
 		$this->Decimosconsignado->id = $id;
 		if (!$this->Decimosconsignado->exists()) {
-			throw new NotFoundException(__('Invalid decimosconsignado'));
+			throw new NotFoundException(__('Número no válido'));
 		}
 		$this->request->onlyAllow('post', 'delete');
 		if ($this->Decimosconsignado->delete()) {
-			$this->Session->setFlash(__('Decimosconsignado deleted'));
-			$this->redirect(array('action' => 'index'));
+			$this->Session->setFlash(__('Número borrado'));
+			$this->redirect(array('action' => 'consignar'));
 		}
-		$this->Session->setFlash(__('Decimosconsignado was not deleted'));
-		$this->redirect(array('action' => 'index'));
+		$this->Session->setFlash(__('El número no se borró'));
+		$this->redirect(array('action' => 'consignar'));
 	}
 }

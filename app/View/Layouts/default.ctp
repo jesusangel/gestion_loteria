@@ -45,6 +45,17 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 		<div id="header">
 			<h1><?php echo __('Gestión de lotería nacional'); ?></h1>
 		</div>
+		<div id="menu">
+			<ul>
+				<li><?php echo $this->Html->link(__('Consignar'), array('controller' => 'decimosconsignados', 'action' => 'seleccionar_sorteo')); ?>
+				<li><?php echo $this->Html->link(__('Vender'), array('controller' => 'ventas', 'action' => 'add')); ?>
+				<li><?php echo $this->Html->link(__('Sorteos'), array('controller' => 'sorteos', 'action' => 'index')); ?>
+				<?php if (Configure::read('debug')): ?>
+				<li><?php echo $this->Html->link(__('Información'), array('controller' => 'pages', 'action' => 'info')); ?>
+				<?php endif; ?>
+				<li><?php echo $this->Html->link(__('Ayuda'), array('controller' => 'pages', 'action' => 'ayuda')); ?>
+			</ul>
+		</div>
 		<div id="content">
 
 			<?php echo $this->Session->flash(); ?>

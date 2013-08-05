@@ -34,7 +34,7 @@ App::uses('CakeNumber', 'Utility');
  * @link		http://book.cakephp.org/2.0/en/controllers.html#the-app-controller
  */
 class AppController extends Controller {
-	public $components = array('DebugKit.Toolbar', 'Session', 'Cookie');
+	public $components = array('DebugKit.Toolbar', 'Session', 'Cookie', 'RequestHandler');
 	public $helpers = array(
 		'Js' => array('Jquery'),
 		'Number' => array(

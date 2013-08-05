@@ -29,10 +29,10 @@
 	</dl>
 </div>
 <div class="actions">
-	<h3><?php echo __('Actions'); ?></h3>
+	<h3><?php echo __('Acciones'); ?></h3>
 	<ul>
 		<li><?php echo $this->Html->link(__('Edit Numerosvendido'), array('action' => 'edit', $numerosvendido['Numerosvendido']['id'])); ?> </li>
-		<li><?php echo $this->Form->postLink(__('Delete Numerosvendido'), array('action' => 'delete', $numerosvendido['Numerosvendido']['id']), null, __('Are you sure you want to delete # %s?', $numerosvendido['Numerosvendido']['id'])); ?> </li>
+		<li><?php echo $this->Form->postLink(__('Delete Numerosvendido'), array('action' => 'delete', $numerosvendido['Numerosvendido']['id']), null, __('¿Seguro que desea borrar # %s\?', $numerosvendido['Numerosvendido']['id'])); ?> </li>
 		<li><?php echo $this->Html->link(__('List Numerosvendidos'), array('action' => 'index')); ?> </li>
 		<li><?php echo $this->Html->link(__('New Numerosvendido'), array('action' => 'add')); ?> </li>
 		<li><?php echo $this->Html->link(__('List Sorteos'), array('controller' => 'sorteos', 'action' => 'index')); ?> </li>

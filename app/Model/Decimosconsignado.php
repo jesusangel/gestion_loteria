@@ -1,5 +1,6 @@
 <?php
 App::uses('AppModel', 'Model');
+App::uses('Sorteo', 'Model');
 
 /**
  * Decimosconsignado Model
@@ -18,8 +19,8 @@ class Decimosconsignado extends AppModel {
 	
 	public $validate = array(
 		'numero' => array(
-			'rule' => array('checkUnique', array('numero', 'sorteo_id', 'serie', 'fraccion')),
-			'message' => 'Este décimo ya ha sido consignado previamente'
+			'rule' => array('checkUnique', array('numero', 'sorteo_id')),
+			'message' => 'Este número ya ha sido consignado previamente'
 		)
 	);
 	
@@ -153,38 +154,23 @@ class Decimosconsignado extends AppModel {
 		if ( $serie_final <= 0 || $serie_final > Configure::read('serieMaxima') ) {
 			throw new UnexpectedValueException(__('La serie final no está dentro de los márgenes admitidos: 1 - ' . Configure::read('serieMaxima')));
 		}
-		
-		$errores = array();
-		$consignados = $duplicados = 0;
-		
-		for ( $serie = $serie_inicial; $serie <= $serie_final; $serie++ ) {
-			for ( $fraccion = 1; $fraccion <= 10; $fraccion++ ) {
-				try {
-					$this->create();
-					if ( $this->save(array(
-						'Decimosconsignado' => array(
+
+		$cantidad_a_consignar = (abs($serie_final - $serie_inicial) + 1) * 10;
+		if ( $decimo = $this->find('first', array('contain' => false, 'fields' => array('id', 'cantidad'), 'conditions' => array('Decimosconsignado.numero' => $numero, 'Decimosconsignado.sorteo_id' => $sorteo['Sorteo']['id']))) ) {
+			$decimo['Decimosconsignado']['cantidad'] += $cantidad_a_consignar;
+		} else {
+			$decimo = array('Decimosconsignado' => array(
 							'numero' => $numero,
-							'serie' => $serie,
-							'fraccion' => $fraccion,
-							'sorteo_id' => $sorteo['Sorteo']['id']
-						)
-					)) ) {
-						$consignados++;
-					} else {
-						$duplicados++;	// La única validación que se hace es la de los duplicados
-					}
-				} catch ( PDOException $e) {
-					if ( $e->getCode() == 23000 ) {
-						$duplicados++;
-					} else {
-						$errores[] = "Error al consignar el décimo número, {$numero}, serie {$serie}, fraccion {$fraccion}: " . $e->getMessage();
-					}
-				} catch( Exception $e ) {
-					$errores[] = "Error al consignar el décimo número, {$numero}, serie {$serie}, fraccion {$fraccion}: " . $e->getMessage();
-				}
-			}
+							'sorteo_id' => $sorteo['Sorteo']['id'],
+							'cantidad' => $cantidad_a_consignar
+			));
 		}
 		
-		return compact('errores', 'duplicados', 'consignados');
+		$this->create();
+		if ( $this->save($decimo) ) {
+			return $cantidad_a_consignar;
+		} else {
+			return 0;
+		}
 	}
 }
