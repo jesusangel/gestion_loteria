@@ -1,0 +1,108 @@
+Instalación
+
+1. Descargar e instalar Wampserver en el ordenador
+
+http://www.wampserver.com/en/#download-wrapper
+
+2. Extraer los archivos de la aplicación en C:\wamp\www\
+
+3. Desde el icono de Wampserver, acceder a Apache -> httpd.conf y modificar
+la línea que comienza por DocumentRoot y la línea inferior, reemplazando
+C:/wamp/www por C:/wamp/gestion_loteria/app/webroot
+
+Deberá quedar así:
+
+DocumentRoot "c:/wamp/www/gestion_loteria/app/webroot"
+<Directory "c:/wamp/www/gestion_loteria/app/webroot">
+
+Guarde y cierre el archivo.
+
+Vuelta a pulsar sobre el icono y vaya a "Apache" -> "Apache modules" y active el
+módulo con el nombre "rewrite module".
+
+4. Copiar el archivo c:/wamp/www/gestion_loteria/app/Config/database.php.default
+a la misma carpeta, con el nombre database.php y editarlo hasta dejarlo del 
+siguiente modo:
+
+class DATABASE_CONFIG {
+
+	public $default = array(
+		'datasource' => 'Database/Mysql',
+		'persistent' => false,
+		'host' => 'localhost',
+		'login' => 'loteria',
+		'password' => '',
+		'database' => 'loteria',
+		'prefix' => '',
+		'encoding' => 'utf8',
+	);
+}
+
+5. Acceder a la consola de la base de datos desde el icono de Wampserver en la barra
+de tareas: MySQL -> MySQL console. Cuando nos pida la clave, pulsamos intro.
+
+6. Crear la base de datos loteria y el usuario homónimo con las siguientes sentencias:
+
+ CREATE DATABASE loteria;
+ GRANT ALL PRIVILEGES ON loteria.* TO 'loteria'@'localhost';
+ FLUSH PRIVILEGES;
+
+Puede copiar y pegar las sentencias anteriores a continuación del prompt (mysql>) de la
+consola.
+
+7. Vaya a Inicio y pulse con el botón secundario del ratón sobre el icono "Equipo".
+Seleccione la opción "Propiedades" y vaya a la pestaña "Opciones avanzadas". Una vez allí,
+pulse sobre el botón "Variables de entorno".
+
+En el apartado "variables del sistema", localice la variable "Path" y modifíquela
+añadiendo al final de la cadena lo siguiente:
+
+;c:\wamp\bin\php\php5.4.16\;c:\wamp\www\gestion_loteria\app\Console\;
+
+Si ha instalado una versión diferente de la 5.4.16 de PHP, tendrá que corregir la cadena
+anterior y poner la versión instalada. Puede navegar por la estructura de carpetas hasta
+llegar a la carpeta donde está instalado PHP.
+
+8. Abra una consola (Inicio -> Ejecutar -> CMD) y copie y pegue lo siguiente:
+
+cd c:\wamp\www\gestion_loteria\app
+cake schema create
+
+Responda con 'y' (basta con pulsar intro) a las preguntas que aparecerán en la pantalla.
+
+Si el comando anterior fallase (si no le aparecen las preguntas) probablemente deberá
+corregir en el archivo c:\wamp\wwww\gestion_loteria\app\Console\cake.php las rutas donde
+PHP busca los includes. Debe asegurarse de que estén incluidas las siguientes:
+
+Por ejemplo: c:\wamp\www\gestion_loteria;c:\wamp\www\gestion_loteria\cakephp\lib;
+
+Las líneas a modificar son las siguientes, la primera si está en un entorno Windows y la
+segunda si está en Linux:
+
+if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+		ini_set('include_path', $root . PATH_SEPARATOR . 'c:' . $ds . 'wamp' . $ds . 'www' . $ds . 'gestion_loteria' . $ds . 'cakephp' . $ds . 'lib' . PATH_SEPARATOR . ini_get('include_path'));
+	} else {
+		ini_set('include_path', $root . PATH_SEPARATOR .  $ds . 'home' . $ds . 'usuario' . $ds . '.submodule_cakephp' . $ds . 'lib' . PATH_SEPARATOR . ini_get('include_path'));
+	}
+
+
+9. Compruebe que accede a la aplicación. Abra un navegador web y escriba en la barra de
+direcciones:
+
+http://localhost/
+
+Pulse sobre el enlace "Información" y compruebe que todos los chequeos aparecen en verde
+
+10. Desactive el modo de depuración editando el archivo:
+
+C:\wamp\www\gestion_loteria\app\Config\core.php
+
+Debe modificar la línea que pone:
+
+Configure::write('debug', 2);
+
+Y cambiar el dos por un cero:
+
+Configure::write('debug', 0);
+
+Guarde y cierre el archivo.

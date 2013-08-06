@@ -27,7 +27,11 @@ if (function_exists('ini_set')) {
 
 	// the following line differs from its sibling
 	// /app/Console/cake.php
-	ini_set('include_path', $root . PATH_SEPARATOR .  $ds . 'home' . $ds . 'jpozdom' . $ds . '.submodule_cakephp' . $ds . 'lib' . PATH_SEPARATOR . ini_get('include_path'));
+	if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+		ini_set('include_path', $root . PATH_SEPARATOR . 'c:' . $ds . 'wamp' . $ds . 'www' . $ds . 'gestion_loteria' . $ds . 'cakephp' . $ds . 'lib' . PATH_SEPARATOR . ini_get('include_path'));
+	} else {
+		ini_set('include_path', $root . PATH_SEPARATOR .  $ds . 'home' . $ds . 'jpozdom' . $ds . '.submodule_cakephp' . $ds . 'lib' . PATH_SEPARATOR . ini_get('include_path'));
+	}
 }
 
 if (!include ($dispatcher)) {
