@@ -72,6 +72,7 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 	<?php		
 		$this->Js->buffer("
 			$('input:not(\'.focus\')').keyboard({
+				autoAccept : true,
 				layout : 'custom',
 				customLayout : {
 					'default' : [
