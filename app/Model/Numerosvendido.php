@@ -16,9 +16,18 @@ class Numerosvendido extends AppModel {
 	public $displayField = 'numero';
 	
 	public $validate = array(
-		'numero' => 'notEmpty',
-		'sorteo_id' => 'notEmpty',
-		'venta_id' => 'notEmpty'
+		'numero' => array(
+			'rule' => 'naturalNumber',
+			'message' => 'El número debe ser mayor que cero'
+		),
+		'sorteo_id' => array(
+			'rule' => 'naturalNumber',
+			'message' => 'El ID del sorteo debe ser mayor que cero'
+		),
+		'venta_id' => array(
+			'rule' => 'naturalNumber',
+			'message' => 'El ID de la venta debe ser mayor que cero'
+		),
 	);
 
 

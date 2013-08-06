@@ -26,31 +26,31 @@
 		echo $this->Form->create();
 	?>
 		<fieldset>
-			<legend><?php echo __('Consignación por series'); ?></legend>
+			<legend><?php echo __('Invender por series'); ?></legend>
 	<?php
 			echo $this->Form->hidden('sorteo_id', array('value' => $sorteo['Sorteo']['id']));
 			echo $this->Form->input('codigo', array('class' => 'focus', 'div' => false, 'label' => __('Código o número del décimo'), 'size' => 20, 'maxlength' => 20));
 			echo $this->Form->input('serieInicial', array('div' => false, 'size' => 3, 'maxlength' => 3));
 			echo $this->Form->input('serieFinal', array('div' => false, 'size' => 3, 'maxlength' => 3));
-			echo $this->form->submit(__('Consignar décimos'), array('div' => false));
+			echo $this->form->submit(__('Invender décimos'), array('div' => false));
 			echo $this->Form->end();
 	?>
 		</fieldset>
 </div>
-<div class="decimosconsignados consignar">
-	<h2><?php echo __('Décimos consignados en este sorteo'); ?></h2>
+<div class="numerosinvendidos invender">
+	<h2><?php echo __('Números invendidos en este sorteo'); ?></h2>
 	<table cellpadding="0" cellspacing="0">
 	<tr>
 			<th><?php echo $this->Paginator->sort('numero'); ?></th>
 			<th><?php echo $this->Paginator->sort('cantidad'); ?></th>
 			<th class="actions"><?php echo __('Acciones'); ?></th>
 	</tr>
-	<?php foreach ($decimosconsignados as $decimosconsignado): ?>
+	<?php foreach ($numerosinvendidos as $numerosinvendido): ?>
 	<tr>
-		<td><?php echo h($decimosconsignado['Decimosconsignado']['numero']); ?>&nbsp;</td>
-		<td><?php echo h($decimosconsignado['Decimosconsignado']['cantidad']); ?>&nbsp;</td>
+		<td><?php echo h($numerosinvendido['Numerosinvendido']['numero']); ?>&nbsp;</td>
+		<td><?php echo h($numerosinvendido['Numerosinvendido']['cantidad']); ?>&nbsp;</td>
 		<td class="actions">
-			<?php echo $this->Form->postLink(__('Borrar'), array('action' => 'delete', $decimosconsignado['Decimosconsignado']['id']), null, __('¿Seguro que quiere borrar el número # %s?', $decimosconsignado['Decimosconsignado']['numero'])); ?>
+			<?php echo $this->Form->postLink(__('Borrar'), array('action' => 'delete', $numerosinvendido['Numerosinvendido']['id']), null, __('¿Seguro que quiere borrar el número # %s?', $numerosinvendido['Numerosinvendido']['numero'])); ?>
 		</td>
 	</tr>
 <?php endforeach; ?>

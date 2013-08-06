@@ -89,9 +89,9 @@ class SorteosController extends AppController {
 			} else {
 				$this->Session->setFlash(__('El sorteo no se pudo guardar. Por favor, inténtelo de nuevo.'));
 			}
-		}/* else {
+		} else {
 			$options = array('conditions' => array('Sorteo.' . $this->Sorteo->primaryKey => $id));
 			$this->request->data = $this->Sorteo->find('first', $options);
-		}*/
+		}
 	}
 }

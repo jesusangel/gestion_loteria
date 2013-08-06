@@ -12,7 +12,7 @@ $config = array(
 	'maximoNumeroSorteo' => 103,
 	// opciones: individual, fraccion, billete, series
 	'modoConsignacionDecimos' => 'series',
-	'modoAnulacionDecimos' => 'series',
+	'modoInvenderDecimos' => 'series',
 );
 
 /*

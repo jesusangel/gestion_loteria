@@ -49,7 +49,9 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 			<ul>
 				<li><?php echo $this->Html->link(__('Consignar'), array('controller' => 'decimosconsignados', 'action' => 'seleccionar_sorteo')); ?>
 				<li><?php echo $this->Html->link(__('Vender'), array('controller' => 'ventas', 'action' => 'add')); ?>
+				<li><?php echo $this->Html->link(__('Invender'), array('controller' => 'numerosinvendidos', 'action' => 'seleccionar_sorteo')); ?>
 				<li><?php echo $this->Html->link(__('Sorteos'), array('controller' => 'sorteos', 'action' => 'index')); ?>
+				<li><?php echo $this->Html->link(__('Informes'), array('controller' => 'informes', 'action' => 'index')); ?>
 				<?php if (Configure::read('debug')): ?>
 				<li><?php echo $this->Html->link(__('Información'), array('controller' => 'pages', 'action' => 'info')); ?>
 				<?php endif; ?>
@@ -63,12 +65,6 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 			<?php echo $this->fetch('content'); ?>
 		</div>
 		<div id="footer">
-			<?php echo $this->Html->link(
-					$this->Html->image('cake.power.gif', array('alt' => $cakeDescription, 'border' => '0')),
-					'http://www.cakephp.org/',
-					array('target' => '_blank', 'escape' => false)
-				);
-			?>
 		</div>
 	</div>
 	<?php		

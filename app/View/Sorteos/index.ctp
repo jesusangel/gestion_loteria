@@ -13,7 +13,7 @@
 	<tr>
 		<td><?php echo h($sorteo['Sorteo']['numero']); ?>&nbsp;</td>
 		<td><?php echo h($sorteo['Sorteo']['anio']); ?>&nbsp;</td>
-		<td><?php echo h($sorteo['Sorteo']['fecha']); ?>&nbsp;</td>
+		<td><?php echo $this->Time->nice($sorteo['Sorteo']['fecha'], null, '%a %e de %b de %Y'); ?>&nbsp;</td>
 		<td><?php echo $this->Number->currency($sorteo['Sorteo']['precio_x_decimo']); ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Html->link(__('Ver'), array('action' => 'view', $sorteo['Sorteo']['id'])); ?>
@@ -31,9 +31,9 @@
 	?>	</p>
 	<div class="paging">
 	<?php
-		echo $this->Paginator->prev('< ' . __('previous'), array(), null, array('class' => 'prev disabled'));
+		echo $this->Paginator->prev('< ' . __('anterior'), array(), null, array('class' => 'prev disabled'));
 		echo $this->Paginator->numbers(array('separator' => ''));
-		echo $this->Paginator->next(__('next') . ' >', array(), null, array('class' => 'next disabled'));
+		echo $this->Paginator->next(__('siguiente') . ' >', array(), null, array('class' => 'next disabled'));
 	?>
 	</div>
 </div>

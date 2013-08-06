@@ -18,7 +18,9 @@ los décimos. Podemos seleccionar el sorteo mediante la lista desplegable o esca
 de barras de uno de los décimos a consignar.</p>
 
 <p>Una vez seleccionado el sorteo, se cargará el formulario con sus datos, y podremos continuar
-hacia la pantalla de consignación para comenzar la misma.</p>
+hacia la pantalla de consignación para comenzar la misma. Si el código escaneado corresponde a 
+un nuevo sorteo, se mostrará el formulario con los datos de dicho sorteo, permitiendo al usuario 
+corregirlos en caso de que detecte algún error.</p>
 
 <h3>Consignando décimos</h3>
 
@@ -27,4 +29,5 @@ rellenar los campos del formulario (p.ej. código o número, serie inicial y ser
 sobre el botón "Consignar décimos".</p>
 
 <p>Si escaneamos el código de un décimo, la aplicación se asegurará de que dicho décimo pertenece
-al sorteo que seleccionamos en el paso anterior.</p>
+al sorteo que seleccionamos en el paso anterior. En caso contrario, no nos permitirá consignar el
+décimo, debiendo seleccionar el sorteo adecuado para consignarlo.</p>

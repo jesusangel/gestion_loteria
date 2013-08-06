@@ -1,7 +1,7 @@
 <div class="decimosconsignados form">
 <?php echo $this->Form->create('Decimosconsignado'); ?>
 	<fieldset>
-		<legend><?php echo __('Seleccione el sorteo'); ?></legend>
+		<legend><?php echo __('Seleccione el sorteo para consignar'); ?></legend>
 	<?php
 		echo $this->Form->input('sorteo_id', array(
 			'empty' => __('Seleccione un sorteo de la lista o "escanee" un décimo')
