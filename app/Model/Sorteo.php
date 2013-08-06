@@ -105,13 +105,11 @@ class Sorteo extends AppModel {
 		if ($numero_sorteo == Configure::read('numeroSorteoNino'))
 		{
 			// Sorteo del niño
-			return new DateTime("{$anio_sorteo}-1-6");
-		}
+			$fecha = (new DateTime("{$anio_sorteo}-1-6"))->format('Y-m-d');		}
 		else if ($numero_sorteo == Configure::read('numeroSorteoNavidad'))
 		{
 			// Sorteo de navidad
-			return new DateTime("{$anio_sorteo}-12-22");
-
+			$fecha = (new DateTime("{$anio_sorteo}-12-22"))->format('Y-m-d');
 		}
 		else
 		{
@@ -129,9 +127,8 @@ class Sorteo extends AppModel {
 			$semanas_transcurridas = $numero_semana - date('W', $fecha_inicial);
 
 			$fecha = date('Y-m-d', strtotime("+{$semanas_transcurridas} week " . date('Y-m-d', $fecha_inicial)));
-			return $fecha;
 		}
 
-		return false;
+		return $fecha;
 	}
 }
