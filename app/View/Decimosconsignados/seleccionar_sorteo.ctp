@@ -4,14 +4,17 @@
 		<legend><?php echo __('Seleccione el sorteo para consignar'); ?></legend>
 	<?php
 		echo $this->Form->input('sorteo_id', array(
-			'empty' => __('Seleccione un sorteo de la lista o "escanee" un décimo')
+			'empty' => __('Seleccione un sorteo de la lista o "escanee" un décimo'),
+			'tabindex' => 2
 		));		
 		echo $this->Form->input('codigo', array(
 			'label' => __('Código del décimo'),
 			'maxlength' => 20,
 			'size' => 20,
-			'class' => 'focus'
+			'class' => 'focus',
+			'tabindex' => 1
 		));
+		echo $this->Html->tag('div', '', array('id' => 'mensajeCodigo', 'class' => 'error-message', 'style' => 'margin-left: 20%'));
 	?>
 	</fieldset>	
 <?php echo $this->Form->end(); ?>
@@ -57,10 +60,17 @@ $(document).ready(
 		$('#DecimosconsignadoCodigo').bind(
 				'change', 
 				function (event) {
-					codigo = $('#DecimosconsignadoCodigo').val();
+					self = this;
+					codigo = $(this).val();
 					if ( codigo.match(/([56]{1})([0-9]{3})([0-9]{1})([0-9]{2})([0-9]{3}).([0-9]{5})([0-9]{4})/) ) {
 						$('#DecimosconsignadoSorteoId').val('');
 						$('#DecimosconsignadoSeleccionarSorteoForm').submit();
+					} else {
+						$(this).val('');
+						$('#mensajeCodigo').html('Código no válido');
+						setTimeout(function () {
+				            $(self).focus();
+				        }, 10);
 					}
 				}
 			)

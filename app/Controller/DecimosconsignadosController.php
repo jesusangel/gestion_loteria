@@ -57,6 +57,7 @@ class DecimosconsignadosController extends AppController {
 			
 				} catch (Exception $e) {
 					$this->Session->setFlash($e->getMessage());
+					$this->request->data('Decimosconsignado.codigo', '');
 				}
 			} else if ( ($sorteo_id = $this->request->data('Decimosconsignado.sorteo_id')) > 0 ) {
 				$sorteo = $this->Decimosconsignado->Sorteo->find('first', array('conditions' => array('id' => $sorteo_id)));
