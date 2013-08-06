@@ -105,11 +105,14 @@ class Sorteo extends AppModel {
 		if ($numero_sorteo == Configure::read('numeroSorteoNino'))
 		{
 			// Sorteo del niño
-			$fecha = (new DateTime("{$anio_sorteo}-1-6"))->format('Y-m-d');		}
+			$fecha_tmp = new DateTime("{$anio_sorteo}-1-6");
+			$fecha = $fecha_tmp->format('Y-m-d');		
+		}
 		else if ($numero_sorteo == Configure::read('numeroSorteoNavidad'))
 		{
 			// Sorteo de navidad
-			$fecha = (new DateTime("{$anio_sorteo}-12-22"))->format('Y-m-d');
+			$fecha_tmp = new DateTime("{$anio_sorteo}-12-22");
+			$fecha = $fecha_tmp->format('Y-m-d');
 		}
 		else
 		{
