@@ -11,11 +11,23 @@ class AppSchema extends CakeSchema {
 	public $decimosconsignados = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'primary'),
 		'numero' => array('type' => 'integer', 'null' => false, 'default' => null),
-		'serie' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 6),
-		'fraccion' => array('type' => 'integer', 'null' => false, 'default' => null, 'length' => 6),
 		'sorteo_id' => array('type' => 'integer', 'null' => false, 'default' => null),
+		'cantidad' => array('type' => 'integer', 'null' => true, 'default' => null),
 		'created' => array('type' => 'datetime', 'null' => false, 'default' => null),
-		'fecha_invendido' => array('type' => 'date', 'null' => true, 'default' => null),
+		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
+		'indexes' => array(
+			'PRIMARY' => array('column' => 'id', 'unique' => 1)
+		),
+		'tableParameters' => array('charset' => 'latin1', 'collate' => 'latin1_swedish_ci', 'engine' => 'MyISAM')
+	);
+
+	public $numerosinvendidos = array(
+		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'key' => 'primary'),
+		'numero' => array('type' => 'integer', 'null' => false, 'default' => null),
+		'sorteo_id' => array('type' => 'integer', 'null' => false, 'default' => null),
+		'cantidad' => array('type' => 'integer', 'null' => true, 'default' => null),
+		'created' => array('type' => 'datetime', 'null' => true, 'default' => null),
+		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1)
 		),
