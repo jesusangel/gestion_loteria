@@ -31,9 +31,11 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 
 		echo $this->Html->css('cake.generic');
 		echo $this->Html->css('ui-lightness/jquery-ui-1.10.3.custom');
+		echo $this->Html->css('keyboard');
 		
 		echo $this->Html->script('jquery-2.0.3'); // Include jQuery library
 		echo $this->Html->script('jquery-ui-1.10.3.custom'); // Include jQuery library
+		echo $this->Html->script('jquery.keyboard');
 
 		echo $this->fetch('meta');
 		echo $this->fetch('css');
@@ -68,6 +70,19 @@ $cakeDescription = __d('cake_dev', 'CakePHP: the rapid development php framework
 		</div>
 	</div>
 	<?php		
+		$this->Js->buffer("
+			$('input:not(\'.focus\')').keyboard({
+				layout : 'custom',
+				customLayout : {
+					'default' : [
+						'7 8 9 {b}',
+						'4 5 6 {clear}',
+						'1 2 3  {clear}',
+						'0 , {a} {c}'
+					]
+				}
+			});
+    	");
 		$this->Js->buffer('$(".focus").focus()'); 
 		echo $this->Js->writeBuffer(); // Write cached scripts 
 	?>
