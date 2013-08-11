@@ -141,7 +141,26 @@ class DecimosconsignadosController extends AppController {
 		}
 		
 		$this->set(compact('sorteo', 'modosConsignacion', 'modoConsignacionSeleccionado'));
-		$this->set('decimosconsignados', $this->paginate(array('sorteo_id' => $sorteo['Sorteo']['id'])));
+		//$this->Decimosconsignado->virtualFields['cantidad'] = 0;
+		//$this->Decimosconsignado->virtualFields['created'] = 0;
+		//$this->Decimosconsignado->virtualFields['modified'] = 0;
+		
+		/*$this->paginate = array(
+			'conditions' => array('sorteo_id' => $sorteo['Sorteo']['id']),
+			'fields' => array(
+				'Decimosconsignado.numero',
+				'SUM(Decimosconsignado.cantidad) AS Decimosconsignado__cantidad',
+				//'MAX(Decimosconsignado.modified) AS Decimosconsignado__modified',
+				//'MIN(Decimosconsignado.created) AS Decimosconsignado__created'
+			),
+			'group' => array('Decimosconsignado.numero'),
+			'order' => array('MAX(Decimosconsignado.modified)' => 'DESC')
+		);*/
+		$this->paginate = array(
+			'conditions' => array('sorteo_id' => $sorteo['Sorteo']['id']),
+			'order' => array('Decimosconsignado.created)' => 'DESC')
+		);
+		$this->set('decimosconsignados', $this->paginate());
 	}		
 
 /**

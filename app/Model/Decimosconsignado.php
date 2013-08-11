@@ -17,10 +17,20 @@ class Decimosconsignado extends AppModel {
 	public $displayField = 'numero';
 	public $order = array('Decimosconsignado.id' => 'DESC');
 	
-	public $validate = array(
+	/*public $validate = array(
 		'numero' => array(
 			'rule' => array('checkUnique', array('numero', 'sorteo_id')),
 			'message' => 'Este número ya ha sido consignado previamente'
+		)
+	);*/
+	public $validate = array(
+		'numero' => array(
+			'rule' => 'naturalNumber',
+			'message' => 'El número debe ser mayor que cero'
+		),
+		'sorteo_id' => array(
+			'rule' => 'naturalNumber',
+			'message' => 'El ID del sorteo debe ser mayor que cero'
 		)
 	);
 	
@@ -156,7 +166,7 @@ class Decimosconsignado extends AppModel {
 		}
 
 		$cantidad_a_consignar = (abs($serie_final - $serie_inicial) + 1) * 10;
-		if ( $decimo = $this->find('first', array('contain' => false, 'fields' => array('id', 'cantidad'), 'conditions' => array('Decimosconsignado.numero' => $numero, 'Decimosconsignado.sorteo_id' => $sorteo['Sorteo']['id']))) ) {
+		if ( false && $decimo = $this->find('first', array('contain' => false, 'fields' => array('id', 'cantidad'), 'conditions' => array('Decimosconsignado.numero' => $numero, 'Decimosconsignado.sorteo_id' => $sorteo['Sorteo']['id']))) ) {
 			$decimo['Decimosconsignado']['cantidad'] += $cantidad_a_consignar;
 		} else {
 			$decimo = array('Decimosconsignado' => array(

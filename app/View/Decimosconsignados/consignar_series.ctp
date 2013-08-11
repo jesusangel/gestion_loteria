@@ -38,17 +38,19 @@
 		</fieldset>
 </div>
 <div class="decimosconsignados consignar">
-	<h2><?php echo __('Décimos consignados en este sorteo'); ?></h2>
+	<h2><?php echo __('Consignaciones en este sorteo'); ?></h2>
 	<table cellpadding="0" cellspacing="0">
 	<tr>
 			<th><?php echo $this->Paginator->sort('numero'); ?></th>
 			<th><?php echo $this->Paginator->sort('cantidad'); ?></th>
+			<th><?php echo $this->Paginator->sort('created', __('Fecha de consignación')); ?></th>
 			<th class="actions"><?php echo __('Acciones'); ?></th>
 	</tr>
 	<?php foreach ($decimosconsignados as $decimosconsignado): ?>
 	<tr>
 		<td><?php echo h($decimosconsignado['Decimosconsignado']['numero']); ?>&nbsp;</td>
 		<td><?php echo h($decimosconsignado['Decimosconsignado']['cantidad']); ?>&nbsp;</td>
+		<td><?php echo $this->Time->niceshort($decimosconsignado['Decimosconsignado']['created']); ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Form->postLink(__('Borrar'), array('action' => 'delete', $decimosconsignado['Decimosconsignado']['id']), null, __('¿Seguro que quiere borrar el número # %s?', $decimosconsignado['Decimosconsignado']['numero'])); ?>
 		</td>

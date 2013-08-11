@@ -40,7 +40,7 @@
 </div>
 
 <div class="related">
-	<h3><?php echo __('Números consignados en este sorteo'); ?></h3>
+	<h3><?php echo __('Consignaciones'); ?></h3>
 	<?php if (!empty($sorteo['Decimosconsignado'])): ?>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
@@ -55,7 +55,7 @@
 		<tr>
 			<td><?php echo $decimosconsignado['numero']; ?></td>
 			<td><?php echo $decimosconsignado['cantidad']; ?></td>
-			<td><?php echo $decimosconsignado['created']; ?></td>
+			<td><?php echo $this->Time->niceshort($decimosconsignado['created']); ?></td>
 			<!-- 
 			<td class="actions">
 				<?php echo $this->Html->link(__('Ver'), array('controller' => 'decimosconsignados', 'action' => 'view', $decimosconsignado['id'])); ?>
@@ -70,12 +70,13 @@
 
 </div>
 <div class="related">
-	<h3><?php echo __('Números vendidos'); ?></h3>
+	<h3><?php echo __('Ventas'); ?></h3>
 	<?php if (!empty($sorteo['Numerosvendido'])): ?>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
 		<th><?php echo __('Numero'); ?></th>
 		<th><?php echo __('Cantidad'); ?></th>
+		<th><?php echo __('Fecha de venta'); ?></th>
 		<!-- <th class="actions"><?php echo __('Acciones'); ?></th> -->
 	</tr>
 	<?php
@@ -84,6 +85,7 @@
 		<tr>
 			<td><?php echo $numerosvendido['numero']; ?></td>
 			<td><?php echo $numerosvendido['cantidad']; ?></td>
+			<td><?php echo $this->Time->niceshort($numerosvendido['Venta']['created']); ?></td>
 			<!-- 
 			<td class="actions">
 				<?php echo $this->Html->link(__('Ver'), array('controller' => 'numerosvendidos', 'action' => 'view', $numerosvendido['id'])); ?>
@@ -98,12 +100,13 @@
 
 </div>
 <div class="related">
-	<h3><?php echo __('Números invendidos'); ?></h3>
+	<h3><?php echo __('Anulaciones'); ?></h3>
 	<?php if (!empty($sorteo['Numerosinvendido'])): ?>
 	<table cellpadding = "0" cellspacing = "0">
 	<tr>
 		<th><?php echo __('Numero'); ?></th>
 		<th><?php echo __('Cantidad'); ?></th>
+		<th><?php echo __('Fecha de anulación'); ?></th>
 		<!-- <th class="actions"><?php echo __('Acciones'); ?></th> -->
 	</tr>
 	<?php
@@ -112,6 +115,7 @@
 		<tr>
 			<td><?php echo $numerosinvendido['numero']; ?></td>
 			<td><?php echo $numerosinvendido['cantidad']; ?></td>
+			<td><?php echo $this->Time->niceshort($numerosinvendido['created']); ?></td>
 			<!-- 
 			<td class="actions">
 				<?php echo $this->Html->link(__('Ver'), array('controller' => 'numerosinvendidos', 'action' => 'view', $numerosinvendido['id'])); ?>

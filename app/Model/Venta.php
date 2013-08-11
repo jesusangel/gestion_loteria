@@ -14,6 +14,8 @@ class Venta extends AppModel {
  */
 	public $displayField = 'importe';
 	
+	public $order = array('created' => 'DESC');
+	
 	public $validate = array(
 		'importe' => array(
 			'rule' => 'naturalNumber',

@@ -86,15 +86,35 @@
 			<th><?php echo __('Décimos vendidos'); ?></th>
 			<th><?php echo __('Décimos invendidos'); ?></th>
 	</tr>
-	<?php foreach ($sorteos as $sorteo): ?>
+	<?php
+		foreach ($sorteos as $sorteo):
+			$consignados = 0;
+			if ( count($sorteo['Decimosconsignado']) > 0 ) {
+				foreach ($sorteo['Decimosconsignado'] as $decimoconsignado) { 
+					$consignados += $decimoconsignado['cantidad'];
+				}
+			} 
+			$vendidos = 0;
+			if ( count($sorteo['Numerosvendido']) > 0 ) {
+				foreach ($sorteo['Numerosvendido'] as $numerovendido) { 
+					$vendidos += $numerovendido['cantidad'];
+				}
+			}
+			$invendidos = 0;
+			if ( count($sorteo['Numerosinvendido']) > 0 ) {
+				foreach ($sorteo['Numerosinvendido'] as $numeroinvendido) { 
+					$invendidos += $numeroinvendido['cantidad'];
+				}
+			}
+	?>
 	<tr>
 		<td><?php echo h($sorteo['Sorteo']['numero']); ?>&nbsp;</td>
 		<td><?php echo h($sorteo['Sorteo']['anio']); ?>&nbsp;</td>
 		<td><?php echo $this->Time->nice($sorteo['Sorteo']['fecha'], null, '%a %e de %b de %Y'); ?>&nbsp;</td>
 		<td><?php echo $this->Number->currency($sorteo['Sorteo']['precio_x_decimo']); ?>&nbsp;</td>
-		<td><?php echo $this->Number->format($sorteo['Sorteo']['Consignados']) . ' (' . $this->Number->currency($sorteo['Sorteo']['Consignados'] * $sorteo['Sorteo']['precio_x_decimo']) . ')'?>
-		<td><?php echo $this->Number->format($sorteo['Sorteo']['Vendidos']) . ' (' . $this->Number->currency($sorteo['Sorteo']['Vendidos'] * $sorteo['Sorteo']['precio_x_decimo']) . ')'?>
-		<td><?php echo $this->Number->format($sorteo['Sorteo']['Invendidos']) . ' (' . $this->Number->currency($sorteo['Sorteo']['Invendidos'] * $sorteo['Sorteo']['precio_x_decimo']) . ')'?>
+		<td><?php echo $this->Number->format($consignados) . ' (' . $this->Number->currency($consignados * $sorteo['Sorteo']['precio_x_decimo']) . ')'?>
+		<td><?php echo $this->Number->format($vendidos) . ' (' . $this->Number->currency($vendidos * $sorteo['Sorteo']['precio_x_decimo']) . ')'?>
+		<td><?php echo $this->Number->format($invendidos) . ' (' . $this->Number->currency($invendidos * $sorteo['Sorteo']['precio_x_decimo']) . ')'?>
 	</tr>
 <?php endforeach; ?>
 	</table>

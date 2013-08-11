@@ -43,12 +43,14 @@
 	<tr>
 			<th><?php echo $this->Paginator->sort('numero'); ?></th>
 			<th><?php echo $this->Paginator->sort('cantidad'); ?></th>
+			<th><?php echo $this->Paginator->sort('created', __('Fecha de anulación')); ?></th>
 			<th class="actions"><?php echo __('Acciones'); ?></th>
 	</tr>
 	<?php foreach ($numerosinvendidos as $numerosinvendido): ?>
 	<tr>
 		<td><?php echo h($numerosinvendido['Numerosinvendido']['numero']); ?>&nbsp;</td>
 		<td><?php echo h($numerosinvendido['Numerosinvendido']['cantidad']); ?>&nbsp;</td>
+		<td><?php echo $this->Time->niceshort($numerosinvendido['Numerosinvendido']['created']); ?>&nbsp;</td>
 		<td class="actions">
 			<?php echo $this->Form->postLink(__('Borrar'), array('action' => 'delete', $numerosinvendido['Numerosinvendido']['id']), null, __('¿Seguro que quiere borrar el número # %s?', $numerosinvendido['Numerosinvendido']['numero'])); ?>
 		</td>

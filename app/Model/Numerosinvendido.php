@@ -23,11 +23,7 @@ class Numerosinvendido extends AppModel {
 		'sorteo_id' => array(
 			'rule' => 'naturalNumber',
 			'message' => 'El ID del sorteo debe ser mayor que cero'
-		),
-		'venta_id' => array(
-			'rule' => 'naturalNumber',
-			'message' => 'El ID de la venta debe ser mayor que cero'
-		),
+		)
 	);
 	
 	//The Associations below have been created with all possible keys, those that are not needed can be removed
@@ -162,7 +158,7 @@ class Numerosinvendido extends AppModel {
 		}
 
 		$cantidad_a_invender = (abs($serie_final - $serie_inicial) + 1) * 10;
-		if ( $decimo = $this->find('first', array('contain' => false, 'fields' => array('id', 'cantidad'), 'conditions' => array('Numerosinvendido.numero' => $numero, 'Numerosinvendido.sorteo_id' => $sorteo['Sorteo']['id']))) ) {
+		if ( false && $decimo = $this->find('first', array('contain' => false, 'fields' => array('id', 'cantidad'), 'conditions' => array('Numerosinvendido.numero' => $numero, 'Numerosinvendido.sorteo_id' => $sorteo['Sorteo']['id']))) ) {
 			$decimo['Numerosinvendido']['cantidad'] += $cantidad_a_invender;
 		} else {
 			$decimo = array('Numerosinvendido' => array(

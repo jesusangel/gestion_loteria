@@ -23,17 +23,18 @@ class InformesController extends AppController {
 	public function view() {
 		$str_fecha_inicial = $this->request->data('Informe.fecha_inicial.year') .'-'. $this->request->data('Informe.fecha_inicial.month') .'-'. $this->request->data('Informe.fecha_inicial.day'); 
 		$str_fecha_final = $this->request->data('Informe.fecha_final.year') .'-'. $this->request->data('Informe.fecha_final.month') .'-'. $this->request->data('Informe.fecha_final.day');
-		/*$sorteos = $this->Sorteo->find('all', array(
+		$sorteos = $this->Sorteo->find('all', array(
 			'conditions' => array(
 				CakeTime::daysAsSql($str_fecha_inicial, $str_fecha_final, 'fecha')
 			),
 			'contain' => array(
-				'Decimosconsignado' => 'sum(cantidad)',
-				'Numerosvendido',
-				'Numerosinvendido'
+				'Decimosconsignado' => 'cantidad',
+				'Numerosinvendido' => 'cantidad',
+				'Numerosvendido' => 'cantidad',
 			),
 			'group' => 'Sorteo.id'
-		));*/
+		));
+		/*
 		$this->Sorteo->virtualFields['Consignados'] = 0;
 		$this->Sorteo->virtualFields['Vendidos'] = 0;
 		$this->Sorteo->virtualFields['Invendidos'] = 0;
@@ -60,8 +61,11 @@ class InformesController extends AppController {
 			WHERE
 				".CakeTime::daysAsSql($str_fecha_inicial, $str_fecha_final, 'Sorteo.fecha')."
 			GROUP BY
-				Sorteo.id
-		");
+				Sorteo.id,
+				Decimosconsignado.sorteo_id,
+				Numerosvendido.sorteo_id,
+				Numerosinvendido.sorteo_id
+		");*/
 		
 		$this->Decimosconsignado->virtualFields['Cantidad'] = 0;
 		$consignados = $this->Decimosconsignado->query("

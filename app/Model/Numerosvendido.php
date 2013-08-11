@@ -15,6 +15,8 @@ class Numerosvendido extends AppModel {
  */
 	public $displayField = 'numero';
 	
+	public $order = array('venta_id' => 'DESC');
+	
 	public $validate = array(
 		'numero' => array(
 			'rule' => 'naturalNumber',

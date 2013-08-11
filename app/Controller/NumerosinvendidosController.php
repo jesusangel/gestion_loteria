@@ -127,7 +127,11 @@ class NumerosinvendidosController extends AppController {
 		$this->request->data('Numerosinvendido.serieFinal', '');
 		
 		$this->set(compact('sorteo', 'modosInvender', 'modoInvenderSeleccionado'));
-		$this->set('numerosinvendidos', $this->paginate(array('sorteo_id' => $sorteo['Sorteo']['id'])));
+		$this->paginate = array(
+			'conditions' => array('sorteo_id' => $sorteo['Sorteo']['id']),
+			'order' => array('Numerosinvendido.created' => 'DESC')
+		);
+		$this->set('numerosinvendidos', $this->paginate());
 	}
 
 /**

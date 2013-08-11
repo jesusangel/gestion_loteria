@@ -28,7 +28,23 @@ class SorteosController extends AppController {
 		if (!$this->Sorteo->exists($id)) {
 			throw new NotFoundException(__('Invalid sorteo'));
 		}
-		$options = array('conditions' => array('Sorteo.' . $this->Sorteo->primaryKey => $id));
+		$options = array(
+			'conditions' => array('Sorteo.' . $this->Sorteo->primaryKey => $id),
+			'contain' => array(
+				'Decimosconsignado' => array(
+					'order' => array('created' => 'desc')
+				),
+				'Numerosvendido' => array(
+					'Venta' => array(
+						'order' => array('created' => 'desc')
+					),
+					'order' => array('venta_id' => 'DESC')
+				),
+				'Numerosinvendido' => array(
+					'order' => array('created' => 'desc')
+				),
+			)
+		);
 		$this->set('sorteo', $this->Sorteo->find('first', $options));
 		
 		$this->Sorteo->virtualFields['Decimosconsignados'] = 0;
