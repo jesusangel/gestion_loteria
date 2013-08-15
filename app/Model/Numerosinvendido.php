@@ -119,7 +119,7 @@ class Numerosinvendido extends AppModel {
 	 * @throws SorteoNoEncontradoException
 	 * @throws DecimoAjenoException  
 	 */
-	public function invender_series($sorteo_id, $codigo_o_numero, $serie_inicial, $serie_final) {
+	public function invender($sorteo_id, $codigo_o_numero, $modo_invender, $serie_inicial, $serie_final) {
 		if ( $sorteo_id <= 0 ) {
 			throw new SorteoNoEncontradoException(__('No se ha especificado el ID del sorteo'));
 		}
@@ -149,24 +149,34 @@ class Numerosinvendido extends AppModel {
 			$numero = (int) $codigo_o_numero; 
 		}
 		
-		if ( $serie_inicial <= 0 || $serie_inicial > Configure::read('serieMaxima') ) {
-			throw new UnexpectedValueException(__('La serie inicial no está dentro de los márgenes admitidos: 1 - ' . Configure::read('serieMaxima')));
+		switch ( $modo_invender ) {
+			case 'series':			
+				if ( $serie_inicial <= 0 || $serie_inicial > Configure::read('serieMaxima') ) {
+					throw new UnexpectedValueException(__('La serie inicial no está dentro de los márgenes admitidos: 1 - ' . Configure::read('serieMaxima')));
+				}
+				
+				if ( $serie_final <= 0 || $serie_final > Configure::read('serieMaxima') ) {
+					throw new UnexpectedValueException(__('La serie final no está dentro de los márgenes admitidos: 1 - ' . Configure::read('serieMaxima')));
+				}
+		
+				$cantidad_a_invender = (abs($serie_final - $serie_inicial) + 1) * 10;
+			break;
+			case 'billete':
+				$cantidad_a_invender = 10;
+			break;
+			case 'fraccion':
+				$cantidad_a_invender = 5;
+			break;
+			default:
+				$cantidad_a_invender = 1;
+			break;
 		}
 		
-		if ( $serie_final <= 0 || $serie_final > Configure::read('serieMaxima') ) {
-			throw new UnexpectedValueException(__('La serie final no está dentro de los márgenes admitidos: 1 - ' . Configure::read('serieMaxima')));
-		}
-
-		$cantidad_a_invender = (abs($serie_final - $serie_inicial) + 1) * 10;
-		if ( false && $decimo = $this->find('first', array('contain' => false, 'fields' => array('id', 'cantidad'), 'conditions' => array('Numerosinvendido.numero' => $numero, 'Numerosinvendido.sorteo_id' => $sorteo['Sorteo']['id']))) ) {
-			$decimo['Numerosinvendido']['cantidad'] += $cantidad_a_invender;
-		} else {
-			$decimo = array('Numerosinvendido' => array(
-							'numero' => $numero,
-							'sorteo_id' => $sorteo['Sorteo']['id'],
-							'cantidad' => $cantidad_a_invender
-			));
-		}
+		$decimo = array('Numerosinvendido' => array(
+						'numero' => $numero,
+						'sorteo_id' => $sorteo['Sorteo']['id'],
+						'cantidad' => $cantidad_a_invender
+		));
 		
 		$this->create();
 		if ( $this->save($decimo) ) {

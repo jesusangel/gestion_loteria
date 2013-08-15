@@ -109,24 +109,13 @@ class DecimosconsignadosController extends AppController {
 			} else {
 				$modoConsignacionSeleccionado = Configure::read('modoConsignacionDecimos');
 			}
-			$this->view = 'consignar_' . $modoConsignacionSeleccionado;
 			
 			if ( $this->request->is('post') ) {
 				$codigo_o_numero = trim($this->request->data('Decimosconsignado.codigo'));
-				switch ( $modoConsignacionSeleccionado ) {
-					case 'individual':
-					break;
-					case 'fraccion':
-					break;
-					case 'billete':
-					break;
-					case 'series':
-						$serie_inicial = (int) $this->request->data('Decimosconsignado.serieInicial');
-						$serie_final = (int) $this->request->data('Decimosconsignado.serieFinal');
-						$resultado = $this->Decimosconsignado->consignar_series($sorteo_id, $codigo_o_numero, $serie_inicial, $serie_final);
-						$this->Session->setFlash(__('Consignados %s números', $resultado));
-					break;
-				}
+				$serie_inicial = (int) $this->request->data('Decimosconsignado.serieInicial');
+				$serie_final = (int) $this->request->data('Decimosconsignado.serieFinal');
+				$resultado = $this->Decimosconsignado->consignar($sorteo_id, $codigo_o_numero, $modoConsignacionSeleccionado, $serie_inicial, $serie_final);
+				$this->Session->setFlash(__('Consignados %s números', $resultado));
 			}
 		} catch ( DecimoAjenoException $e ) {
 			$this->Session->setFlash($e->getMessage());
@@ -141,21 +130,7 @@ class DecimosconsignadosController extends AppController {
 		}
 		
 		$this->set(compact('sorteo', 'modosConsignacion', 'modoConsignacionSeleccionado'));
-		//$this->Decimosconsignado->virtualFields['cantidad'] = 0;
-		//$this->Decimosconsignado->virtualFields['created'] = 0;
-		//$this->Decimosconsignado->virtualFields['modified'] = 0;
-		
-		/*$this->paginate = array(
-			'conditions' => array('sorteo_id' => $sorteo['Sorteo']['id']),
-			'fields' => array(
-				'Decimosconsignado.numero',
-				'SUM(Decimosconsignado.cantidad) AS Decimosconsignado__cantidad',
-				//'MAX(Decimosconsignado.modified) AS Decimosconsignado__modified',
-				//'MIN(Decimosconsignado.created) AS Decimosconsignado__created'
-			),
-			'group' => array('Decimosconsignado.numero'),
-			'order' => array('MAX(Decimosconsignado.modified)' => 'DESC')
-		);*/
+
 		$this->paginate = array(
 			'conditions' => array('sorteo_id' => $sorteo['Sorteo']['id']),
 			'order' => array('Decimosconsignado.created)' => 'DESC')

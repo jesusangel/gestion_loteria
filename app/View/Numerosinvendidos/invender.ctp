@@ -1,5 +1,5 @@
-<div class="sorteos">
-	<h2><?php echo __('Sorteo') . ' ' . $sorteo['Sorteo']['titulo']; ?></h2>
+<fieldset>
+	<legend><?php echo __('Sorteo') . ' ' . $sorteo['Sorteo']['titulo']; ?></legend>
 	<dl>
 		<dt><?php echo __('Precio de los décimos'); ?></dt>
 		<dd>
@@ -7,33 +7,41 @@
 			&nbsp;
 		</dd>
 	</dl>
-</div>
+</fieldset>
 
 <div>
+	<fieldset>
+		<legend><?php echo __('Anulación'); ?></legend>
 	<?php
-	/* 
-		echo $this->Form->create(null, array('action' => 'set_modo_consignacion'));
-		echo $this->Form->input('modoConsignacion', array(
-			'type' => 'radio',
-			'options' => $modosConsignacion,
-			'legend' => __('Modo de consignación seleccionado'), 
+		echo $this->Form->create(null, array('action' => 'set_modo_invender'));
+		echo $this->Form->input('modoInvender', array(
+			'type' => 'select',
+			'div' => false,
+			'label' => __('Modo de anulación'),
+			'options' => $modosInvender,
+			'legend' => __('Modo de anulación seleccionado'), 
 			'empty' => false,
-			'value' => $modoConsignacionSeleccionado));
-		echo $this->Form->submit(__('Cambiar el modo de consignación'), array('div' => false));
-		echo $this->Form->end();
-	*/		
+			'value' => $modoInvenderSeleccionado));
+		echo $this->Form->end();		
 		
 		echo $this->Form->create();
-	?>
-		<fieldset>
-			<legend><?php echo __('Invender por series'); ?></legend>
-	<?php
-			echo $this->Form->hidden('sorteo_id', array('value' => $sorteo['Sorteo']['id']));
-			echo $this->Form->input('codigo', array('class' => 'focus', 'div' => false, 'label' => __('Código o número del décimo'), 'size' => 20, 'maxlength' => 20));
-			echo $this->Form->input('serieInicial', array('div' => false, 'size' => 3, 'maxlength' => 3));
-			echo $this->Form->input('serieFinal', array('div' => false, 'size' => 3, 'maxlength' => 3));
-			echo $this->form->submit(__('Invender décimos'), array('div' => false));
-			echo $this->Form->end();
+		echo $this->Form->hidden('sorteo_id', array('value' => $sorteo['Sorteo']['id']));
+		
+		switch ( $modoInvenderSeleccionado ) {
+			case 'individual':
+			case 'fraccion':
+			case 'billete':
+				echo $this->Form->input('codigo', array('class' => 'focus', 'div' => false, 'label' => __('Código o número del décimo'), 'size' => 20, 'maxlength' => 20));				
+			break;
+			default:
+				echo $this->Form->input('codigo', array('class' => 'focus', 'div' => false, 'label' => __('Código o número del décimo'), 'size' => 20, 'maxlength' => 20));
+				echo $this->Form->input('serieInicial', array('div' => false, 'size' => 3, 'maxlength' => 3));
+				echo $this->Form->input('serieFinal', array('div' => false, 'size' => 3, 'maxlength' => 3));
+			break;
+		}
+		
+		echo $this->form->submit(__('Invender'), array('div' => false));
+		echo $this->Form->end();
 	?>
 		</fieldset>
 </div>
@@ -71,3 +79,10 @@
 	?>
 	</div>
 </div>
+<script type="text/javascript">
+$(document).ready(function() {
+	$('#NumerosinvendidoModoInvender').change(function() {
+		this.form.submit();
+	});
+});
+</script>

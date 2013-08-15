@@ -121,13 +121,13 @@ class Decimosconsignado extends AppModel {
 			return (int) $fecha->format('Y') - ($digito - $digito_anio);
 		}
 	}
-
+	
 	/**
 	 * @throws SorteoNoEncontradoException
 	 * @throws SorteoNoEncontradoException
 	 * @throws DecimoAjenoException  
 	 */
-	public function consignar_series($sorteo_id, $codigo_o_numero, $serie_inicial, $serie_final) {
+	public function consignar($sorteo_id, $codigo_o_numero, $modo_consignacion, $serie_inicial, $serie_final) {
 		if ( $sorteo_id <= 0 ) {
 			throw new SorteoNoEncontradoException(__('No se ha especificado el ID del sorteo'));
 		}
@@ -157,24 +157,34 @@ class Decimosconsignado extends AppModel {
 			$numero = (int) $codigo_o_numero; 
 		}
 		
-		if ( $serie_inicial <= 0 || $serie_inicial > Configure::read('serieMaxima') ) {
-			throw new UnexpectedValueException(__('La serie inicial no está dentro de los márgenes admitidos: 1 - ' . Configure::read('serieMaxima')));
+		switch ( $modo_consignacion ) {
+			case 'series':			
+				if ( $serie_inicial <= 0 || $serie_inicial > Configure::read('serieMaxima') ) {
+					throw new UnexpectedValueException(__('La serie inicial no está dentro de los márgenes admitidos: 1 - ' . Configure::read('serieMaxima')));
+				}
+				
+				if ( $serie_final <= 0 || $serie_final > Configure::read('serieMaxima') ) {
+					throw new UnexpectedValueException(__('La serie final no está dentro de los márgenes admitidos: 1 - ' . Configure::read('serieMaxima')));
+				}
+		
+				$cantidad_a_consignar = (abs($serie_final - $serie_inicial) + 1) * 10;
+			break;
+			case 'billete':
+				$cantidad_a_consignar = 10;
+			break;
+			case 'fraccion':
+				$cantidad_a_consignar = 5;
+			break;
+			default:
+				$cantidad_a_consignar = 1;
+			break;
 		}
 		
-		if ( $serie_final <= 0 || $serie_final > Configure::read('serieMaxima') ) {
-			throw new UnexpectedValueException(__('La serie final no está dentro de los márgenes admitidos: 1 - ' . Configure::read('serieMaxima')));
-		}
-
-		$cantidad_a_consignar = (abs($serie_final - $serie_inicial) + 1) * 10;
-		if ( false && $decimo = $this->find('first', array('contain' => false, 'fields' => array('id', 'cantidad'), 'conditions' => array('Decimosconsignado.numero' => $numero, 'Decimosconsignado.sorteo_id' => $sorteo['Sorteo']['id']))) ) {
-			$decimo['Decimosconsignado']['cantidad'] += $cantidad_a_consignar;
-		} else {
-			$decimo = array('Decimosconsignado' => array(
-							'numero' => $numero,
-							'sorteo_id' => $sorteo['Sorteo']['id'],
-							'cantidad' => $cantidad_a_consignar
-			));
-		}
+		$decimo = array('Decimosconsignado' => array(
+						'numero' => $numero,
+						'sorteo_id' => $sorteo['Sorteo']['id'],
+						'cantidad' => $cantidad_a_consignar
+		));
 		
 		$this->create();
 		if ( $this->save($decimo) ) {

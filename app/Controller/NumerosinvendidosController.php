@@ -91,24 +91,13 @@ class NumerosinvendidosController extends AppController {
 			} else {
 				$modoInvenderSeleccionado = Configure::read('modoInvenderDecimos');
 			}
-			$this->view = 'invender_' . $modoInvenderSeleccionado;
 			
 			if ( $this->request->is('post') ) {
 				$codigo_o_numero = trim($this->request->data('Numerosinvendido.codigo'));
-				switch ( $modoInvenderSeleccionado ) {
-					case 'individual':
-					break;
-					case 'fraccion':
-					break;
-					case 'billete':
-					break;
-					case 'series':
-						$serie_inicial = (int) $this->request->data('Numerosinvendido.serieInicial');
-						$serie_final = (int) $this->request->data('Numerosinvendido.serieFinal');
-						$resultado = $this->Numerosinvendido->invender_series($sorteo_id, $codigo_o_numero, $serie_inicial, $serie_final);
-						$this->Session->setFlash(__('Invendidos %s números', $resultado));
-					break;
-				}
+				$serie_inicial = (int) $this->request->data('Numerosinvendido.serieInicial');
+				$serie_final = (int) $this->request->data('Numerosinvendido.serieFinal');
+				$resultado = $this->Numerosinvendido->invender($sorteo_id, $codigo_o_numero, $modoInvenderSeleccionado, $serie_inicial, $serie_final);
+				$this->Session->setFlash(__('Invendidos %s números', $resultado));
 			}
 		} catch ( DecimoAjenoException $e ) {
 			$this->Session->setFlash($e->getMessage());
